@@ -4,55 +4,57 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-#Se obtuvo la ruta del ejecutable del argumento
-ruta_ejecutable="$1"
+#Se asigna la ruta del ejecutable brindada en el argumento a la variable "rutaexe"
+rutaexe="$1"
 
-#Se crea un rchivo de registro para guardar los valores de CPU y memoria
-archivo_log="registro_consumo.txt"
+#Se crea un archivo de registro para guardar los valores de CPU y memoria
+archivo_reg="registro_consumo.txt"
 
-#Se iniciar el proceso en segundo plano
-"$ruta_ejecutable" &
+#Se inicia el proceso en segundo plano
+"$rutaexe" &
 
-#Se obtiene el PID del proceso recién iniciado
-pid="$!"
+#Ahora, se obtiene el process ID (PID) del proceso recién iniciado
+pID="$!"
 
-#El encabezado del archivo de registro
+#Ahora, se imprime el encabezado del archivo de registro
 echo "Tiempo (segundos) CPU (%) Memoria (MB)" > "$archivo_log"
 
-#Se le indica un intervalo de muestreo en segundos
+#Se indica un intervalo de muestreo en segundos
 intervalo=5
 
-#La duración de la monitorización en segundos
+#Se indica la duración de la monitorización en segundos
 duracion=60
 
-#Como iniciar la monitorización
+#Ahora, se obtiene el tiempo inicial en segundos desde el inicio de la monitorización y se establece el tiempo actual en 0
 tiempo_inicial=$(date +%s)
 tiempo_actual=0
 
+#Ahora se crea un bucle para obtener el uso de CPU y memoria del proceso con el PID almacenado en la variable "pID". 
 while [ "$tiempo_actual" -lt "$duracion" ]; do
     #Se obtiene el uso de CPU y memoria del proceso
-    uso_cpu=$(ps -p "$pid" -o %cpu | tail -n 1)
-    uso_memoria=$(ps -p "$pid" -o %mem | tail -n 1)
+    uso_cpu=$(ps -p "$pID" -o %cpu | tail -n 1)
+    uso_memoria=$(ps -p "$pID" -o %mem | tail -n 1)
     
-    #Se obtiene el tiempo actual en segundos desde el inicio
+    #Ahora, se obtiene el tiempo actual en segundos desde el inicio
     tiempo_actual=$(($(date +%s) - tiempo_inicial))
     
-    #Se registrar los valores en el archivo de registro
-    echo "$tiempo_actual $uso_cpu $uso_memoria" >> "$archivo_log"
+    #Ahora se registran los valores en el archivo de registro
+    echo "$tiempo_actual $uso_cpu $uso_memoria" >> "$archivo_reg"
     
-    # Esperar el intervalo de muestreo
+    # Se espera el intervalo de muestreo
     sleep "$intervalo"
 done
 
-#Como generar gráfico utilizando Gnuplot
+#Se grafican los valores utilizando Gnuplot
 gnuplot <<EOF
 set terminal png
 set output "consumo_cpu_memoria.png"
 set title "Consumo de CPU y Memoria"
 set xlabel "Tiempo (segundos)"
 set ylabel "Porcentaje de CPU / Uso de Memoria (MB)"
-plot "$archivo_log" using 1:2 with lines title "CPU%", \
-     "$archivo_log" using 1:3 with lines title "Memoria (MB)"
+plot "$archivo_reg" using 1:2 with lines title "CPU%", \
+     "$archivo_reg" using 1:3 with lines title "Memoria (MB)"
 EOF
 
-echo "Proceso finalizado. El gráfico se encuentra en consumo_cpu_memoria.png"
+#Finalmente, se imprime que el proceso ha finalizado, así como la ubicación del plot
+echo "El proceso ha finalizado. El plot creado se encuentra en consumo_cpu_memoria.png"
