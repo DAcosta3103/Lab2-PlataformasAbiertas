@@ -1,1 +1,31 @@
+# Primero se comprueba si se brindaron los argumentos necesarios
+if [ $# -ne 2 ]; then
+    echo "Uso: $0 <nombre_del_proceso> <comando_para_ejecutar>"
+    exit 1
+fi
 
+#Ahora, se asignan los argumentos brindados a las variables "nombre_proceso" y "comando"
+nombre_proceso="$1"
+comando="$2"
+
+#Se crea una función para verificar si el proceso está en ejecución
+proceso_en_ejecucion() {
+    if pgrep -x "$nombre_proceso" > /dev/null; then
+        return 0  # El proceso está en ejecución
+    else
+        return 1  # El proceso no está en ejecución
+    fi
+}
+
+#Se iniciar el proceso inicialmente
+echo "Iniciando el proceso: $nombre_proceso"
+$comando &
+
+#Se crea un loop con while para monitorear y reiniciar el proceso si es necesario
+while true; do
+    if ! proceso_en_ejecucion; then
+        echo "El proceso $nombre_proceso se ha cerrado. Reiniciando..."
+        $comando &
+    fi
+    sleep 5  #Este es el intervalo de monitoreo en segundos
+done
