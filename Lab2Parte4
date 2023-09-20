@@ -1,1 +1,24 @@
+#Primero, se crea el directorio a monitorear
+directorio_a_monitorear="/home/diego/PlataformasAbiertas"
 
+# Se asigna el registro (en este caso "registro.log" y se asigna a la variable "archivo_reg")
+archivo_reg="/home/diego/registro.log"
+#Se usa el comando sugerido, para este comando se debe instalar un tool desde la terminal de Linux para poder usarlo
+while true; do
+    inotifywait -e create,modify,delete -r "$directorio_a_monitorear" >> "$archivo_reg"
+done
+
+
+#Ahora, se crea un archivo de unidad de servicio "systemd". Este archivo nos servirá para definir y configurar un servicio que se ejecutará en un sistema Linux, el cual es controlado por systemd
+
+#se utiliza el ejemplo base dado en las instrucciones del laboratorio
+[Unit]
+Description=Servicio de Monitoreo de Cambios en Directorios
+After=network.target #Esta instrucción indica que el servicio se iniciará hasta que la red esté completamente disponible.
+
+[Service]
+ExecStart=/home/diego/directory_monitor.sh # Esta instrucción especifica el comando que se debe ejecutar cuando se inicia el servicio. En este caso, el comando es /home/diego/directory_monitor.sh
+Restart=always #Esta instrucción hace que el servicio se reinicie en caso de que algo salga mal.
+
+[Install]
+WantedBy=multi-user.target #Esta isntrucción especifica en qué nivel de ejecución (runlevel) se debe habilitar el servicio. multi-user.target se refiere al nivel de ejecución multiusuario
