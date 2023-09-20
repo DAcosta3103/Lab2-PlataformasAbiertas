@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #Primero se comprueba si se brindaron los argumentos necesarios
 if [ $# -ne 2 ]; then
     echo "Uso: $0 <nombre_del_proceso> <comando_para_ejecutar>"
