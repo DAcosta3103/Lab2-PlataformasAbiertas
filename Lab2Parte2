@@ -8,24 +8,17 @@ fi
 nombre_proceso="$1"
 comando="$2"
 
-#Se crea una función para verificar el estado de la ejecución del proceso 
-proceso_en_ejecucion() {
-    if pgrep -x "$nombre_proceso" > /dev/null; then
-        return 0  # El proceso "$nombre_proceso" está en ejecución
-    else
-        return 1  # El proceso "$nombre_proceso" no está en ejecución
-    fi
-}
-
-#Se iniciar el proceso inicialmente
-echo "Iniciando el proceso: $nombre_proceso"
-$comando &
-
-#Se crea un loop con while para monitorear y reiniciar el proceso si es necesario
+#Se crea un ciclo while para verificar si el proceso está en ejecución, y en caso de que no lo esté se procede a levantarlo
 while true; do
-    if ! proceso_en_ejecucion; then
-        echo "El proceso $nombre_proceso se ha cerrado. Reiniciando..."
-        $comando &
-    fi
-    sleep 5  #Este es el intervalo de monitoreo en segundos
+  # Acá se verifica si el proceso está en ejecución
+  if pgrep -x "$nombre_proceso" > /dev/null; then
+    echo "El proceso '$nombre_proceso' está en ejecución."
+  else
+    echo "El proceso '$nombre_proceso' no está en ejecución o se ha cerrado. Se procederá a levantarlo"
+    # Como el proceso no está en ejecución, se usa el comando para levantarlo
+    $comando &
+  fi
+
+  # Se espera un tiempo antes de verificar nuevamente. En este caso, se espera 5 segundos
+  sleep 5  
 done
