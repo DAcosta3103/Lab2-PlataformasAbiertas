@@ -1,0 +1,58 @@
+#Primero se comprueba si se brindan los argumentos necesarios
+if [ $# -ne 1 ]; then
+    echo "Uso: $0 <ruta_del_ejecutable>"
+    exit 1
+fi
+
+#Se obtuvo la ruta del ejecutable del argumento
+ruta_ejecutable="$1"
+
+#Se crea un rchivo de registro para guardar los valores de CPU y memoria
+archivo_log="registro_consumo.txt"
+
+#Se iniciar el proceso en segundo plano
+"$ruta_ejecutable" &
+
+#Se obtiene el PID del proceso recién iniciado
+pid="$!"
+
+#El encabezado del archivo de registro
+echo "Tiempo (segundos) CPU (%) Memoria (MB)" > "$archivo_log"
+
+#Se le indica un intervalo de muestreo en segundos
+intervalo=5
+
+#La duración de la monitorización en segundos
+duracion=60
+
+#Como iniciar la monitorización
+tiempo_inicial=$(date +%s)
+tiempo_actual=0
+
+while [ "$tiempo_actual" -lt "$duracion" ]; do
+    #Se obtiene el uso de CPU y memoria del proceso
+    uso_cpu=$(ps -p "$pid" -o %cpu | tail -n 1)
+    uso_memoria=$(ps -p "$pid" -o %mem | tail -n 1)
+    
+    #Se obtiene el tiempo actual en segundos desde el inicio
+    tiempo_actual=$(($(date +%s) - tiempo_inicial))
+    
+    #Se registrar los valores en el archivo de registro
+    echo "$tiempo_actual $uso_cpu $uso_memoria" >> "$archivo_log"
+    
+    # Esperar el intervalo de muestreo
+    sleep "$intervalo"
+done
+
+#Como generar gráfico utilizando Gnuplot
+gnuplot <<EOF
+set terminal png
+set output "consumo_cpu_memoria.png"
+set title "Consumo de CPU y Memoria"
+set xlabel "Tiempo (segundos)"
+set ylabel "Porcentaje de CPU / Uso de Memoria (MB)"
+plot "$archivo_log" using 1:2 with lines title "CPU%", \
+     "$archivo_log" using 1:3 with lines title "Memoria (MB)"
+EOF
+
+echo "Proceso finalizado. El gráfico se encuentra en consumo_cpu_memoria.png"
