@@ -1,0 +1,42 @@
+# Se comprueba si se proporcionó un argumento (ID de proceso)
+if [ $# -ne 1 ]; then
+    echo "Uso: $0 <ID del proceso>"
+    exit 1
+fi
+
+# Se obtener el ID del proceso del argumento
+pid=$1
+
+# a)El nombre del proceso
+nombre_proceso=$(ps -o comm= -p $pid)
+
+# b) El ID del proceso
+# Ya tenemos el ID del proceso
+
+# c) Se obtiene el parent process ID
+ppid=$(ps -o ppid= -p $pid)
+
+# d)El usuario propietario
+usuario=$(ps -o user= -p $pid)
+
+# e)El porcentaje de uso de CPU al momento de correr el script
+uso_cpu=$(ps -o %cpu= -p $pid)
+
+# f)El consumo de memoria
+consumo_memoria=$(ps -o %mem= -p $pid)
+
+# g)Se obtiene estado (status)
+estado=$(ps -o stat= -p $pid)
+
+# h)Se asigna el path del ejecutable
+path_ejecutable=$(readlink /proc/$pid/exe)
+
+#Se imprime la información obtenida
+echo "a) Nombre del proceso: $nombre_proceso"
+echo "b) ID del proceso: $pid"
+echo "c) Parent process ID: $ppid"
+echo "d) Usuario propietario: $usuario"
+echo "e) Porcentaje de uso de CPU: $uso_cpu"
+echo "f) Consumo de memoria: $consumo_memoria"
+echo "g) Estado: $estado"
+echo "h) Path del ejecutable: $path_ejecutable"
