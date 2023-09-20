@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #Primero, se crea el directorio a monitorear
 directorio_a_monitorear="/home/diego/PlataformasAbiertas"
 
