@@ -5,34 +5,34 @@ if [ $# -ne 1 ]; then
 fi
 
 # Ahora, asignamos el ID del proceso obtenido del argumento a la variable "id_Proceso"
-id_Proceso=$1
+id_proceso=$1
 
 # a) Se obtiene el nombre del proceso
-nombre_proceso=$(ps -o comm= -p $id_Proceso)
+nombre_proceso=$(ps -o comm= -p $id_proceso)
 
 # b) Cabe destacar que ya se tiene el ID del proceso en la variable "$id_Proceso"
 
 # c) Se obtiene el parent process ID (ppid)
-ppid=$(ps -o ppid= -p $id_Proceso)
+ppid=$(ps -o ppid= -p $id_proceso)
 
 # d) Se obtiene el usuario propietario
-usuario=$(ps -o user= -p $id_Proceso)
+usuario=$(ps -o user= -p $id_proceso)
 
 # e)Se obtiene el porcentaje de uso de CPU al momento de correr el script
-uso_cpu=$(ps -o %cpu= -p $id_Proceso)
+uso_cpu=$(ps -o %cpu= -p $id_proceso)
 
 # f)Se obtiene el consumo de memoria
-consumo_memoria=$(ps -o %mem= -p $id_Proceso)
+consumo_memoria=$(ps -o %mem= -p $id_proceso)
 
 # g)Se obtiene estado (status)
-estado=$(ps -o stat= -p $id_Proceso)
+estado=$(ps -o stat= -p $id_proceso)
 
 # h)Se asigna el path del ejecutable
-path_ejecutable=$(readlink /proc/$id_Proceso/exe)
+path_ejecutable=$(readlink /proc/$id_proceso/exe)
 
 #Finalmente, se imprime la información obtenida
 echo "a) El nombre del proceso es: $nombre_proceso"
-echo "b) El ID del proceso es: $id_Proceso"
+echo "b) El ID del proceso es: $id_proceso"
 echo "c) El parent process ID es: $ppid"
 echo "d) Usuario propietario: $usuario"
 echo "e) Porcentaje de uso de CPU: $uso_cpu"
