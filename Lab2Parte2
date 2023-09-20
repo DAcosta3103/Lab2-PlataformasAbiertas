@@ -11,9 +11,9 @@ comando="$2"
 #Se crea una función para verificar el estado de la ejecución del proceso 
 proceso_en_ejecucion() {
     if pgrep -x "$nombre_proceso" > /dev/null; then
-        return 0  # El proceso está en ejecución
+        return 0  # El proceso "$nombre_proceso" está en ejecución
     else
-        return 1  # El proceso no está en ejecución
+        return 1  # El proceso "$nombre_proceso" no está en ejecución
     fi
 }
 
