@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #Primero se comprueba si se brindan los argumentos necesarios
 if [ $# -ne 1 ]; then
     echo "Uso: $0 <ruta_del_ejecutable>"
