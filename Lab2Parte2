@@ -1,14 +1,14 @@
-# Primero se comprueba si se brindaron los argumentos necesarios
+#Primero se comprueba si se brindaron los argumentos necesarios
 if [ $# -ne 2 ]; then
     echo "Uso: $0 <nombre_del_proceso> <comando_para_ejecutar>"
     exit 1
 fi
 
-#Ahora, se asignan los argumentos brindados a las variables "nombre_proceso" y "comando"
+#Ahora, se asignan los argumentos obtenidos a las variables "nombre_proceso" y "comando"
 nombre_proceso="$1"
 comando="$2"
 
-#Se crea una función para verificar si el proceso está en ejecución
+#Se crea una función para verificar el estado de la ejecución del proceso 
 proceso_en_ejecucion() {
     if pgrep -x "$nombre_proceso" > /dev/null; then
         return 0  # El proceso está en ejecución
