@@ -4,7 +4,7 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-# Ahora, asignamos el ID del proceso obtenido del argumento a la variable "id_Proceso"
+# Ahora, asignamos el ID del proceso obtenido del argumento a la variable "id_proceso"
 id_proceso=$1
 
 # a) Se obtiene el nombre del proceso
