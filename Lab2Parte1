@@ -1,4 +1,4 @@
-#Primero comprueba si se proporciona un argumento válido (ID de proceso)
+#Primero comprueba si se brinda un argumento válido (ID de proceso)
 if [ $# -ne 1 ]; then
     echo "Uso: $0 <ID del proceso>"
     exit 1
