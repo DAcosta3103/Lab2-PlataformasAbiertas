@@ -1,42 +1,41 @@
-# Se comprueba si se proporcionó un argumento (ID de proceso)
+# Primero comprueba si se proporciona un argumento válido (ID de proceso)
 if [ $# -ne 1 ]; then
     echo "Uso: $0 <ID del proceso>"
     exit 1
 fi
 
-# Se obtener el ID del proceso del argumento
-pid=$1
+# Ahora, asignamos el ID del proceso obtenido del argumento a la variable "id_Proceso"
+id_Proceso=$1
 
-# a)El nombre del proceso
-nombre_proceso=$(ps -o comm= -p $pid)
+# a) Se obtiene el nombre del proceso
+nombre_proceso=$(ps -o comm= -p $id_Proceso)
 
-# b) El ID del proceso
-# Ya tenemos el ID del proceso
+# b) Cabe destacar que ya se tiene el ID del proceso en la variable "$id_Proceso"
 
-# c) Se obtiene el parent process ID
-ppid=$(ps -o ppid= -p $pid)
+# c) Se obtiene el parent process ID (ppid)
+ppid=$(ps -o ppid= -p $id_Proceso)
 
-# d)El usuario propietario
-usuario=$(ps -o user= -p $pid)
+# d) Se obtiene el usuario propietario
+usuario=$(ps -o user= -p $id_Proceso)
 
-# e)El porcentaje de uso de CPU al momento de correr el script
-uso_cpu=$(ps -o %cpu= -p $pid)
+# e)Se obtiene el porcentaje de uso de CPU al momento de correr el script
+uso_cpu=$(ps -o %cpu= -p $id_Proceso)
 
-# f)El consumo de memoria
-consumo_memoria=$(ps -o %mem= -p $pid)
+# f)Se obtiene el consumo de memoria
+consumo_memoria=$(ps -o %mem= -p $id_Proceso)
 
 # g)Se obtiene estado (status)
-estado=$(ps -o stat= -p $pid)
+estado=$(ps -o stat= -p $id_Proceso)
 
 # h)Se asigna el path del ejecutable
-path_ejecutable=$(readlink /proc/$pid/exe)
+path_ejecutable=$(readlink /proc/$id_Proceso/exe)
 
-#Se imprime la información obtenida
-echo "a) Nombre del proceso: $nombre_proceso"
-echo "b) ID del proceso: $pid"
-echo "c) Parent process ID: $ppid"
+#Finalmente, se imprime la información obtenida
+echo "a) El nombre del proceso es: $nombre_proceso"
+echo "b) El ID del proceso es: $id_Proceso"
+echo "c) El parent process ID es: $ppid"
 echo "d) Usuario propietario: $usuario"
 echo "e) Porcentaje de uso de CPU: $uso_cpu"
-echo "f) Consumo de memoria: $consumo_memoria"
-echo "g) Estado: $estado"
-echo "h) Path del ejecutable: $path_ejecutable"
+echo "f) El consumo de memoria es: $consumo_memoria"
+echo "g) El estado es: $estado"
+echo "h) El path del ejecutable corresponde a: $path_ejecutable"
