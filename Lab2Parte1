@@ -7,27 +7,27 @@ fi
 #Ahora, asignamos el ID del proceso obtenido del argumento a la variable "id_proceso"
 id_proceso=$1
 
-#a) Se obtiene el nombre del proceso
+#Se obtiene el nombre del proceso
 nombre_proceso=$(ps -o comm= -p $id_proceso)
 
-#b) Cabe destacar que ya se tiene el ID del proceso en la variable "$id_Proceso"
+#Cabe destacar que ya se tiene el ID del proceso en la variable "$id_Proceso"
 
-#c) Se obtiene el parent process ID (ppid)
+#Se obtiene el parent process ID (ppid)
 ppid=$(ps -o ppid= -p $id_proceso)
 
-#d) Se obtiene el usuario propietario
+#Se obtiene el usuario propietario
 usuario=$(ps -o user= -p $id_proceso)
 
-#e)Se obtiene el porcentaje de uso de CPU al momento de correr el script
+#Se obtiene el porcentaje de uso de CPU al momento de correr el script
 uso_cpu=$(ps -o %cpu= -p $id_proceso)
 
-#f)Se obtiene el consumo de memoria
+#Se obtiene el consumo de memoria
 consumo_memoria=$(ps -o %mem= -p $id_proceso)
 
-#g)Se obtiene estado (status)
+#Se obtiene estado (status)
 estado=$(ps -o stat= -p $id_proceso)
 
-#h)Se asigna el path del ejecutable
+#Se asigna el path del ejecutable
 path_ejecutable=$(readlink /proc/$id_proceso/exe)
 
 #Finalmente, se imprime la información obtenida
